@@ -1,6 +1,6 @@
 /*
 - Sistema de gestión de entradas - Innova ESPE 2026
-- RF01, RF02, RF03 y RF04 (Consultar Cupos)
+- RF01, RF02, RF03, RF04 y RF05 (Consultar Ingresos)
  */
 
 // ===== RF01. Configuración inicial =====
@@ -165,6 +165,24 @@ const consultarCupos = () => {
   console.log(mensaje);
 };
 
+// ===== RF05. Consultar ingresos acumulados =====
+const consultarIngresos = () => {
+  const promedioPorCompra =
+    comprasRealizadas > 0
+      ? (ingresosAcumulados / comprasRealizadas).toFixed(2)
+      : "0.00";
+
+  const mensaje =
+    "REPORTE DE INGRESOS - INNOVA ESPE 2026\n\n" +
+    "Compras realizadas: " + comprasRealizadas + "\n" +
+    "Entradas vendidas: " + entradasVendidas + "\n" +
+    "Ingresos acumulados: $" + ingresosAcumulados.toFixed(2) + "\n" +
+    "Promedio por compra: $" + promedioPorCompra;
+
+  alert(mensaje);
+  console.log(mensaje);
+};
+
 // ===== RF02. Menú principal =====
 const iniciarSistema = () => {
   let opcion;
@@ -192,7 +210,7 @@ const iniciarSistema = () => {
         consultarCupos();
         break;
       case "3":
-        alert("Opción 3: Consultar ingresos (Pendiente RF05)");
+        consultarIngresos();
         break;
       case "4":
         alert("Saliendo del sistema...");
