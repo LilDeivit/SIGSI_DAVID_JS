@@ -1,6 +1,6 @@
 /*
 - Sistema de gestión de entradas - Innova ESPE 2026
-- RF01, RF02, RF03, RF04 y RF05 (Consultar Ingresos)
+- RF01, RF02, RF03, RF04, RF05 y RF06 (Sistema Completo)
  */
 
 // ===== RF01. Configuración inicial =====
@@ -183,6 +183,20 @@ const consultarIngresos = () => {
   console.log(mensaje);
 };
 
+// ===== RF06. Salir del sistema (Resumen final) =====
+const mostrarResumenFinal = () => {
+  const resumen =
+    "CIERRE DEL SISTEMA - INNOVA ESPE 2026\n\n" +
+    "Total compras realizadas: " + comprasRealizadas + "\n" +
+    "Entradas vendidas: " + entradasVendidas + " de " + CUPOS_INICIALES + "\n" +
+    "Cupos disponibles restantes: " + cuposDisponibles + "\n" +
+    "Total ingresos recaudados: $" + ingresosAcumulados.toFixed(2) + "\n\n" +
+    "Gracias por usar el Sistema Innova ESPE 2026.";
+
+  alert(resumen);
+  console.log(resumen);
+};
+
 // ===== RF02. Menú principal =====
 const iniciarSistema = () => {
   let opcion;
@@ -213,7 +227,7 @@ const iniciarSistema = () => {
         consultarIngresos();
         break;
       case "4":
-        alert("Saliendo del sistema...");
+        mostrarResumenFinal();
         break;
       default:
         alert("Opción no válida. Elija un número del 1 al 4.");
