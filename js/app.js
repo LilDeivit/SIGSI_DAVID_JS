@@ -1,6 +1,6 @@
 /*
 - Sistema de gestión de entradas - Innova ESPE 2026
-- RF01 y RF02 (Menú Principal con Arrow Functions)
+- RF01, RF02 y RF03 (Compra de entradas con Arrow Functions)
  */
 
 // ===== RF01. Configuración inicial =====
@@ -16,6 +16,137 @@ let cuposDisponibles = CUPOS_INICIALES;
 let entradasVendidas = 0;
 let ingresosAcumulados = 0;
 let comprasRealizadas = 0;
+
+// ===== Funciones auxiliares (Arrow Functions) =====
+const normalizar = (texto) => {
+  return texto
+    .trim()
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+};
+
+const obtenerTipoParticipante = (entrada) => {
+  const tipo = normalizar(entrada);
+
+  if (tipo === "estudiante" || tipo === "1") {
+    return { nombre: "Estudiante", descuento: DESCUENTO_ESTUDIANTE };
+  } else if (tipo === "docente" || tipo === "2") {
+    return { nombre: "Docente", descuento: DESCUENTO_DOCENTE };
+  } else if (
+    tipo === "publico general" ||
+    tipo === "general" ||
+    tipo === "publico" ||
+    tipo === "3"
+  ) {
+    return { nombre: "Público general", descuento: DESCUENTO_GENERAL };
+  }
+  return null;
+};
+
+const validarCantidad = (texto) => {
+  const limpio = texto.trim();
+  if (!/^\d+$/.test(limpio)) {
+    return { valida: false, motivo: "La cantidad debe ser un número entero." };
+  }
+  const cantidad = Number(limpio);
+  if (cantidad < 1 || cantidad > MAX_ENTRADAS_POR_COMPRA) {
+    return {
+      valida: false,
+      motivo: "La cantidad debe estar entre 1 y " + MAX_ENTRADAS_POR_COMPRA + ".",
+    };
+  }
+  return { valida: true, cantidad: cantidad };
+};
+
+const rechazarCompra = (motivo) => {
+  alert("Compra rechazada.\n" + motivo);
+  console.log("Compra rechazada: " + motivo);
+};
+
+// ===== RF03. Compra de entradas =====
+const comprarEntradas = () => {
+  if (cuposDisponibles === 0) {
+    rechazarCompra("El evento está agotado.");
+    return;
+  }
+
+  // 1. Nombre
+  const nombreEntrada = prompt("Ingrese el nombre del comprador:");
+  if (nombreEntrada === null) {
+    rechazarCompra("Operación cancelada por el usuario.");
+    return;
+  }
+  const nombre = nombreEntrada.trim();
+  if (nombre === "") {
+    rechazarCompra("El nombre no puede estar vacío.");
+    return;
+  }
+
+  // 2. Tipo de participante
+  const tipoEntrada = prompt(
+    "Tipo de participante:\n1. Estudiante\n2. Docente\n3. Público general\n\n(Escriba el nombre o el número)"
+  );
+  if (tipoEntrada === null) {
+    rechazarCompra("Operación cancelada por el usuario.");
+    return;
+  }
+  const tipo = obtenerTipoParticipante(tipoEntrada);
+  if (tipo === null) {
+    rechazarCompra("Tipo de participante no válido.");
+    return;
+  }
+
+  // 3. Cantidad
+  const cantidadEntrada = prompt(
+    "Cantidad de entradas (1 a " + MAX_ENTRADAS_POR_COMPRA + "):"
+  );
+  if (cantidadEntrada === null) {
+    rechazarCompra("Operación cancelada por el usuario.");
+    return;
+  }
+  const resultado = validarCantidad(cantidadEntrada);
+  if (!resultado.valida) {
+    rechazarCompra(resultado.motivo);
+    return;
+  }
+  const cantidad = resultado.cantidad;
+
+  // 4. Cupos suficientes
+  if (cantidad > cuposDisponibles) {
+    rechazarCompra(
+      "No hay cupos suficientes. Cupos disponibles: " + cuposDisponibles + "."
+    );
+    return;
+  }
+
+  // 5. Cálculos
+  const subtotal = cantidad * PRECIO_ENTRADA;
+  const valorDescuento = subtotal * tipo.descuento;
+  const total = subtotal - valorDescuento;
+  const porcentaje = tipo.descuento * 100;
+
+  // 6. Actualizar datos (solo si la compra es válida)
+  cuposDisponibles -= cantidad;
+  entradasVendidas += cantidad;
+  ingresosAcumulados += total;
+  comprasRealizadas++;
+
+  // 7. Resumen
+  const resumen =
+    "RESUMEN DE COMPRA\n\n" +
+    "Nombre: " + nombre + "\n" +
+    "Tipo de participante: " + tipo.nombre + "\n" +
+    "Cantidad de entradas: " + cantidad + "\n\n" +
+    "Subtotal: $" + subtotal.toFixed(2) + "\n" +
+    "Descuento (" + porcentaje + " %): $" + valorDescuento.toFixed(2) + "\n" +
+    "Total a pagar: $" + total.toFixed(2) + "\n\n" +
+    "Compra realizada exitosamente.\n\n" +
+    "Cupos restantes: " + cuposDisponibles;
+
+  alert(resumen);
+  console.log(resumen);
+};
 
 // ===== RF02. Menú principal =====
 const iniciarSistema = () => {
@@ -38,7 +169,7 @@ const iniciarSistema = () => {
 
     switch (opcion) {
       case "1":
-        alert("Opción 1: Comprar entradas (Pendiente RF03)");
+        comprarEntradas();
         break;
       case "2":
         alert("Opción 2: Consultar cupos (Pendiente RF04)");
