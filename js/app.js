@@ -1,6 +1,6 @@
 /*
 - Sistema de gestión de entradas - Innova ESPE 2026
-- RF01, RF02 y RF03 (Compra de entradas con Arrow Functions)
+- RF01, RF02, RF03 y RF04 (Consultar Cupos)
  */
 
 // ===== RF01. Configuración inicial =====
@@ -126,7 +126,7 @@ const comprarEntradas = () => {
   const total = subtotal - valorDescuento;
   const porcentaje = tipo.descuento * 100;
 
-  // 6. Actualizar datos (solo si la compra es válida)
+  // 6. Actualizar datos
   cuposDisponibles -= cantidad;
   entradasVendidas += cantidad;
   ingresosAcumulados += total;
@@ -146,6 +146,23 @@ const comprarEntradas = () => {
 
   alert(resumen);
   console.log(resumen);
+};
+
+// ===== RF04. Consultar cupos disponibles =====
+const consultarCupos = () => {
+  const porcentajeOcupacion = ((entradasVendidas / CUPOS_INICIALES) * 100).toFixed(1);
+  const estado = cuposDisponibles === 0 ? "¡EVENTO AGOTADO!" : "DISPONIBLE";
+
+  const mensaje =
+    "ESTADO DE CUPOS - INNOVA ESPE 2026\n\n" +
+    "Capacidad total: " + CUPOS_INICIALES + "\n" +
+    "Entradas vendidas: " + entradasVendidas + "\n" +
+    "Cupos disponibles: " + cuposDisponibles + "\n" +
+    "Ocupación: " + porcentajeOcupacion + "%\n" +
+    "Estado: " + estado;
+
+  alert(mensaje);
+  console.log(mensaje);
 };
 
 // ===== RF02. Menú principal =====
@@ -172,7 +189,7 @@ const iniciarSistema = () => {
         comprarEntradas();
         break;
       case "2":
-        alert("Opción 2: Consultar cupos (Pendiente RF04)");
+        consultarCupos();
         break;
       case "3":
         alert("Opción 3: Consultar ingresos (Pendiente RF05)");
