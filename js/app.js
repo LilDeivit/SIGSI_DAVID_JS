@@ -150,16 +150,22 @@ const comprarEntradas = () => {
 
 // ===== RF04. Consultar cupos disponibles =====
 const consultarCupos = () => {
-  const porcentajeOcupacion = ((entradasVendidas / CUPOS_INICIALES) * 100).toFixed(1);
-  const estado = cuposDisponibles === 0 ? "¡EVENTO AGOTADO!" : "DISPONIBLE";
+  let mensajeDisponibilidad = "";
+
+  if (cuposDisponibles > 10) {
+    mensajeDisponibilidad = "Cupos disponibles";
+  } else if (cuposDisponibles >= 1 && cuposDisponibles <= 10) {
+    mensajeDisponibilidad = "Últimos cupos disponibles";
+  } else {
+    mensajeDisponibilidad = "Evento agotado";
+  }
 
   const mensaje =
     "ESTADO DE CUPOS - INNOVA ESPE 2026\n\n" +
     "Capacidad total: " + CUPOS_INICIALES + "\n" +
     "Entradas vendidas: " + entradasVendidas + "\n" +
     "Cupos disponibles: " + cuposDisponibles + "\n" +
-    "Ocupación: " + porcentajeOcupacion + "%\n" +
-    "Estado: " + estado;
+    "Estado: " + mensajeDisponibilidad;
 
   alert(mensaje);
   console.log(mensaje);
