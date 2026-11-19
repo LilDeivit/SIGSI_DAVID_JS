@@ -1,6 +1,6 @@
 /*
 - Sistema de gestión de entradas - Innova ESPE 2026
-- RF01, RF02, RF03 y RF04 (Consultar Cupos)
+- RF01, RF02, RF03, RF04, RF05 y RF06 (Sistema Completo)
  */
 
 // ===== RF01. Configuración inicial =====
@@ -150,19 +150,57 @@ const comprarEntradas = () => {
 
 // ===== RF04. Consultar cupos disponibles =====
 const consultarCupos = () => {
-  const porcentajeOcupacion = ((entradasVendidas / CUPOS_INICIALES) * 100).toFixed(1);
-  const estado = cuposDisponibles === 0 ? "¡EVENTO AGOTADO!" : "DISPONIBLE";
+  let mensajeDisponibilidad = "";
+
+  if (cuposDisponibles > 10) {
+    mensajeDisponibilidad = "Cupos disponibles";
+  } else if (cuposDisponibles >= 1 && cuposDisponibles <= 10) {
+    mensajeDisponibilidad = "Últimos cupos disponibles";
+  } else {
+    mensajeDisponibilidad = "Evento agotado";
+  }
 
   const mensaje =
     "ESTADO DE CUPOS - INNOVA ESPE 2026\n\n" +
     "Capacidad total: " + CUPOS_INICIALES + "\n" +
     "Entradas vendidas: " + entradasVendidas + "\n" +
     "Cupos disponibles: " + cuposDisponibles + "\n" +
-    "Ocupación: " + porcentajeOcupacion + "%\n" +
-    "Estado: " + estado;
+    "Estado: " + mensajeDisponibilidad;
 
   alert(mensaje);
   console.log(mensaje);
+};
+
+// ===== RF05. Consultar ingresos acumulados =====
+const consultarIngresos = () => {
+  const promedioPorCompra =
+    comprasRealizadas > 0
+      ? (ingresosAcumulados / comprasRealizadas).toFixed(2)
+      : "0.00";
+
+  const mensaje =
+    "REPORTE DE INGRESOS - INNOVA ESPE 2026\n\n" +
+    "Compras realizadas: " + comprasRealizadas + "\n" +
+    "Entradas vendidas: " + entradasVendidas + "\n" +
+    "Ingresos acumulados: $" + ingresosAcumulados.toFixed(2) + "\n" +
+    "Promedio por compra: $" + promedioPorCompra;
+
+  alert(mensaje);
+  console.log(mensaje);
+};
+
+// ===== RF06. Salir del sistema (Resumen final) =====
+const mostrarResumenFinal = () => {
+  const resumen =
+    "CIERRE DEL SISTEMA - INNOVA ESPE 2026\n\n" +
+    "Total compras realizadas: " + comprasRealizadas + "\n" +
+    "Entradas vendidas: " + entradasVendidas + " de " + CUPOS_INICIALES + "\n" +
+    "Cupos disponibles restantes: " + cuposDisponibles + "\n" +
+    "Total ingresos recaudados: $" + ingresosAcumulados.toFixed(2) + "\n\n" +
+    "Gracias por usar el Sistema Innova ESPE 2026.";
+
+  alert(resumen);
+  console.log(resumen);
 };
 
 // ===== RF02. Menú principal =====
@@ -192,10 +230,10 @@ const iniciarSistema = () => {
         consultarCupos();
         break;
       case "3":
-        alert("Opción 3: Consultar ingresos (Pendiente RF05)");
+        consultarIngresos();
         break;
       case "4":
-        alert("Saliendo del sistema...");
+        mostrarResumenFinal();
         break;
       default:
         alert("Opción no válida. Elija un número del 1 al 4.");
